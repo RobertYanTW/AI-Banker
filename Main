@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI BANKER - 你的資產守護者</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 全局設置 */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 网格布局 */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: auto;
+            gap: 0;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 区域样式 */
+        .header {
+            grid-column: span 12;
+            background-color: #ffffff;
+            border-bottom: 10px solid #000000;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header img {
+            max-width: 100px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+            color: #000000;
+        }
+
+        .sidebar {
+            grid-column: span 4;
+            background-color: #f7df1e; /* 黃色 */
+            border-right: 10px solid #000000;
+            padding: 20px;
+        }
+
+        .main-content {
+            grid-column: span 8;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            background-color: #ffffff;
+            padding: 20px;
+        }
+
+        .achievement {
+            grid-column: span 2;
+            background-color: #ffffff;
+            border-top: 10px solid #000000;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .feature, .achievement, .result {
+            border: 10px solid #000000;
+        }
+
+        .feature:nth-child(1) {
+            background-color: #e57373; /* 紅色 */
+        }
+
+        .feature:nth-child(2) {
+            background-color: #64b5f6; /* 藍色 */
+        }
+
+        .result {
+            grid-column: span 2;
+            background-color: #ffffff;
+            border-top: 10px solid #000000;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #f7df1e; /* 黃色 */
+        }
+
+        .news-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .news-item {
+            background-color: #ffffff; /* 白色 */
+            border: 10px solid #000000;
+            padding: 10px;
+        }
+
+        .news-item img {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            grid-column: span 12;
+            background-color: #000000; /* 黑色 */
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+        }
+
+        /* 表單和按鈕樣式 */
+        input[type="text"], input[type="url"], select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #000000;
+            border-radius: 0;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid #000000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #000000;
+            color: #f7df1e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="/mnt/data/AI Banker.png" alt="AI Banker Logo">
+            <h1>AI BANKER</h1>
+            <p>你的資產守護者</p>
+        </header>
+
+        <aside class="sidebar">
+            <h2>電信驗證</h2>
+            <label for="telecom">選擇電信供應商</label>
+            <select id="telecom">
+                <option value="cht">中華電信</option>
+                <option value="twm">台灣大哥大</option>
+                <option value="fareastone">遠傳電信</option>
+                <option value="aptg">亞太電信</option>
+            </select>
+            <label for="verificationCode">輸入驗證碼</label>
+            <input type="text" id="verificationCode" placeholder="輸入驗證碼">
+            <button onclick="verifyTelecom()">提交驗證</button>
+        </aside>
+
+        <main class="main-content">
+            <div class="feature">
+                <h2>網站監控</h2>
+                <input type="url" id="websiteUrl" placeholder="輸入網址">
+                <button onclick="checkWebsite()">檢查網站</button>
+            </div>
+
+            <div class="feature">
+                <h2>簡訊監控</h2>
+                <input type="text" id="smsContent" placeholder="輸入簡訊內容">
+                <button onclick="checkSMS()">檢查簡訊</button>
+            </div>
+        </main>
+
+        <section class="achievement">
+            <h2>成就達成</h2>
+            <p id="userContribution"></p>
+        </section>
+
+        <section class="result">
+            <h2>分析結果</h2>
+            <p id="resultContent">結果將顯示在這裡...</p>
+        </section>
+
+        <section class="news-container">
+            <!-- News Items will be injected here -->
+        </section>
+
+        <footer class="footer">
+            <p>&copy; 2024 AI BANKER. 版權所有。</p>
+        </footer>
+    </div>
+
+    <script>
+        let suspiciousWebsitesCount = 0;
+        let suspiciousSMSCount = 0;
+
+        const scamPatterns = [
+            { pattern: /銀行.*(帳戶|帳號|密碼|驗證)/, description: "可能是冒用銀行名義的詐騙簡訊" },
+            { pattern: /(網銀|驗證碼|銀行).*連結/, description: "可能是釣魚網站，要求提供網銀帳密" },
+            { pattern: /飆股|股票.*群組|加入群組/, description: "可能是冒用證券商名義的詐騙簡訊" },
+            { pattern: /疫苗|紓困|補助/, description: "可能是假冒政府或健保單位的詐騙簡訊" },
+            { pattern: /簡體字|簡體中文|不常見的用語/, description: "簡訊內容中出現簡體中文或不常見的用語，可能是詐騙簡訊" }
+        ];
+
+        function verifyTelecom() {
+            const telecom = document.getElementById('telecom').value;
+            const verificationCode = document.getElementById('verificationCode').value;
+
+            if (verificationCode) {
+                alert(`已向 ${telecom} 提交驗證碼：${verificationCode}`);
+            } else {
+                alert("請輸入驗證碼");
+            }
+        }
+
+        function checkSMS() {
+            const sms = document.getElementById('smsContent').value;
+            let resultMessage = "這則簡訊看起來是安全的。但請始終保持謹慎。";
+            let isScam = false;
+
+            for (const { pattern, description } of scamPatterns) {
+                if (pattern.test(sms)) {
+                    resultMessage = `警告：這可能是一則詐騙簡訊！理由：${description}`;
+                    isScam = true;
+                    suspiciousSMSCount++;
+                    break;
+                }
+            }
+
+            displayResult(resultMessage);
+            if (isScam) {
+                showNotification("簡訊檢測結果", resultMessage);
+            }
+            updateUserContribution();
+        }
+
+        function checkWebsite() {
+            const url = document.getElementById('websiteUrl').value;
+            const suspiciousDomains = ['scam.com', 'phishing.net', 'fraud.org'];
+            const isSuspicious = suspiciousDomains.some(domain => url.includes(domain));
+            const hasRandomString = /[a-zA-Z0-9]{10,}/.test(url);
+            let resultMessage = "這個網站看起來是安全的。但仍需保持警惕。";
+            let isScam = false;
+
+            if (hasRandomString) {
+                resultMessage = "警告：此網址含有亂碼，有高概率為釣魚詐騙網站，請小心！";
+                isScam = true;
+                suspiciousWebsitesCount++;
+            } else if (isSuspicious) {
+                resultMessage = "警告：這可能是一個可疑網站！請小心處理。";
+                isScam = true;
+                suspiciousWebsitesCount++;
+            }
+
+            displayResult(resultMessage);
+            if (isScam) {
+                showNotification("網站檢測結果", resultMessage);
+            }
+            updateUserContribution();
+        }
+
+        function displayResult(message) {
+            document.getElementById('resultContent').innerText = message;
+        }
+
+        function showNotification(title, message) {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        new Notification(title, {
+                            body: message,
+                            icon: "https://example.com/path/to/icon.png" // 替換為您的圖標URL
+                        });
+                    }
+                });
+            }
+        }
+
+        function updateUserContribution() {
+            const contributionMessage = `您已回報了 ${suspiciousWebsitesCount} 個可疑網站和 ${suspiciousSMSCount} 則可疑簡訊。感謝您為台灣防止詐騙盡了一份心力，您是台灣的驕傲！`;
+            document.getElementById('userContribution').innerText = contributionMessage;
+        }
+
+        const news = [
+            { title: "新型網絡詐騙手法曝光，專家呼籲提高警惕", content: "最近出現了一種新的網絡詐騙手法，騙子偽裝成知名公司客服...", img: "https://via.placeholder.com/300x200?text=News+1" },
+            { title: "政府推出新的反詐騙措施", content: "為了應對日益猖獗的電信詐騙，政府今日宣布一系列新措施...", img: "https://via.placeholder.com/300x200?text=News+2" },
+            { title: "AI技術在防範金融詐騙中的應用", content: "隨著AI技術的發展，越來越多的銀行開始使用AI系統來檢測可疑交易...", img: "https://via.placeholder.com/300x200?text=News+3" }
+        ];
+
+        function displayNews() {
+            const newsContainer = document.querySelector('.news-container');
+            news.forEach(item => {
+                const newsItem = document.createElement('div');
+                newsItem.classList.add('news-item');
+                newsItem.innerHTML = `
+                    <img src="${item.img}" alt="News Image">
+                    <h3>${item.title}</h3>
+                    <p>${item.content}</p>
+                `;
+                newsContainer.appendChild(newsItem);
+            });
+        }
+
+        window.onload = function() {
+            displayNews();
+            updateUserContribution();
+        };
+    </script>
+</body>
+</html>
